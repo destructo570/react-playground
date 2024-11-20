@@ -5,6 +5,7 @@ const Counter = () => {
   const {count, increment, decrement} = useContext(CounterContext);
   return (
     <div className="flex flex-col items-center justify-center gap-4 p-4">
+      <h1>ContextAPI Counter Exmple</h1>
       <div className="flex gap-4 font-medium">
         <h1>Count : </h1>
         <h1>{count}</h1>
