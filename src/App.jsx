@@ -1,22 +1,40 @@
-import { Provider } from 'react-redux'
-import './App.css'
-import Counter from './components/ContextApiCounter/Counter'
-import ReduxCounter from './components/ReduxCounter/ReduxCounter'
-import { CounterContextProvider } from './context/CounterContextProvider'
-import store from './reduxStore/store'
+import { useDispatch, useSelector } from "react-redux";
+import "./App.css";
+import { useEffect } from "react";
+import { fetchContent } from "./reduxStore/contentSlice";
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchContent());
+  }, [dispatch]);
+
+  const contents = useSelector((state) => state.content.contents);
+  const isLoading = useSelector((state) => state.content.isLoading);
+  const error = useSelector((state) => state.content.error);
+
+  if (isLoading) {
+    return "loading...";
+  }
+
+  if (error) {
+    return error;
+  }
 
   return (
-    <div>
-      {/* <CounterContextProvider>
-        <Counter/>
-      </CounterContextProvider> */}
-      <Provider store={store}>
-        <ReduxCounter/>
-      </Provider>
+    <div className="grid gap-4 grid-cols-2  md:grid-cols-4 lg:grid-cols-8  p-4">
+      {contents.map((content) => (
+        <div key={content.id}>
+          <img
+            src={`${content.thumbnailUrl}`}
+            alt={`${content.title}`}
+            className="w-full h-full rounded"
+          />
+        </div>
+      ))}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
