@@ -1,22 +1,25 @@
-import { Provider } from 'react-redux'
-import './App.css'
-import Counter from './components/ContextApiCounter/Counter'
-import ReduxCounter from './components/ReduxCounter/ReduxCounter'
-import { CounterContextProvider } from './context/CounterContextProvider'
-import store from './reduxStore/store'
+import React from 'react';
+import ErrorBoundary from './components/ErrorBoundary';
+const DataFetchingComponent = React.lazy(() => import('./components/DataFetchingComponent'));
 
-function App() {
-
+function PostSkeleton() {
   return (
-    <div>
-      {/* <CounterContextProvider>
-        <Counter/>
-      </CounterContextProvider> */}
-      <Provider store={store}>
-        <ReduxCounter/>
-      </Provider>
+    <div className="skeleton">
+      Loading....
     </div>
-  )
+  );
 }
 
-export default App
+function App() {
+  return (
+    <div>
+      <ErrorBoundary>
+        <React.Suspense fallback={<PostSkeleton/>}>
+          <DataFetchingComponent />
+        </React.Suspense>
+      </ErrorBoundary>
+    </div>
+  );
+}
+
+export default App;
